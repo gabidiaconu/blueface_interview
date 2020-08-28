@@ -1,0 +1,132 @@
+
+## Android questions:
+1. What are your main pain points about the Android framework?
+	Talking from my experience and my personal point of view, the main pain points about Android framework are the following:
+	* the multitude of  Android mobile phones types. I think this is a general complaint for all Android developers, because our main purpose is to build a stable, fast, user friendly app that is supposed to work and look the same on all types and sizes of mobile phones/tablets. Even if the Google/Android team and independent programmer did a really good job in the past years (ConstraintLayout, ssp, sdp, drawable size distinction, etc) it’s still a problem that us, the Android developers,  get into once in a while.
+	* framework changes during new versions of Android OS and deprecations. Even if most of the changes are happening in a positive direction, making things easier to implement and in some cases more secure, that makes our life as Android Developers harder sometimes. Excluding the changes from Android 5.0 to Android 6.0, for me, at my previous job at Arobs Transilvania Software, the most problematic new version was the launch of Android 10. Some of our main applications were being sold as licence per device, and as an unique identifier we were using the device’s IMEI code. Android version 10 restricted the access of the phone’s internal information so we need to put things on hold, this becoming a number 1 critical priority.
+
+2. What is the purpose of the Activity?
+	The Activity in Android, is a UI holder representation, covering all the screen, making possible the implementation of the visual elements of an application. It has its own lifecycle making possible to implement better functionalities based on the user’s actions and state of the app. In natural language, an Activity is like a shelf which can store different objects (Pictures/Imageview, Gadgets/Buttons, Books/TextView, etc.).
+
+3. What is the purpose of the Fragments?
+	A Fragment is an independent component, which cannot exist only placed inside an Activity. The purpose of it is to make the application work better, consuming less resources, giving the developer the possibility to reuse “parts” of the screen, which have their own lifecycle for better performance.
+
+4. Explain the lifeCycle of the Activity?
+
+	For me, even the term “lifecycle” makes me think of “frontend” programming. We need to take in account first of all the interaction our user could/has with our program/application. In Android Framework this is something fundamental, all majors components are gravitating around lifecycle. We want our applications to be stable and performant, so we need to take into account each action the user can take, and each event that could happen (applications are running on a smartphone, with an operating system = external events happen even if our application is in foreground - eg. phone calls).
+	If we want our app to be stable, to ensure that it won’t crash on different states (phone call, screen rotations), to not consume to many resounse than needed, or to keep the progress of our applicationstat if the user exists and comes back to activity, we need to have a good implementation of the lifecycle callbacks that I will explain briefly as it follows:
+
+onCreate(): startup login of the app, that should happen only once for the entire activity
+onStart(): activity becomes visible to the user and here should be the code that maintains the UI
+onResume(): activity comes into the foreground and the user can interact with it. If the activity is removed from the foreground, it will enter the onPause callback, and if there some components are released, this is the callback where you should reinitialize them.
+onPause(): activity is no longer in the foreground, meaning that the user is about to leave it (going to another activity or a dialog appears). It is a good practice to release resources that the activity won’t need at this precise point.
+ onStop(): this callback is triggered when the activity is no longer visible for the user.
+onDestroy(): it is called before the activity is destroyed (finish() called or configuration change)
+
+5. Explain the lifeCycle of the Fragment?
+	LifeCycle of the Fragment resembles a lot with the lifecycle of the Activity, as previously mentioned the fact that the fragment is a stand alone component attached to an Activity. The callback mentioned at the previously questions act the same for the fragment and also, in addition, the Fragment has some more callback that I will describe bellow:
+onAttach(): is triggered when the fragment is attached to an activity
+onDetach(): is triggered when the fragment is removed from an activity
+onCreateView(): is triggered when the UI is firstly created
+onDestroyView(): is called when the UI is being destroyed
+
+6. Why would you advocate using Material Design to a project manager?
+	All Android Applications are designed in order to satisfy the need of some specific or general user. The fact that it is running on an Android Device (smartphone) it needs to be user friendly and offer a modern and clear UI/UX experience to the user. It is a proven fact, statistically recorded, that an user will choose an application that has a nicer design, a more deductive interface and it’s faster and easier to be used. Material Design by Google was promoted specifically for that: better UI/UX, better UI, and engaging the user more into using the app.
+
+7. What’s the difference between Dialog and AlertDialog in Android?
+	The alertDialog is an extension of the well known Dialog, being just a simplified version of it, when you need to show just a message to the user (alert) and at least one action button. On the other hand, as a developer, you have more flexibility when using a Dialog. You can make it custom, specifically dedicated for the need of it (eg. user adding some data, validating some flags).
+
+8. Given a simple contact item, with image and name and number, how could you implement it in XML (which components would you use)?
+	The term “item” makes me think of a list, a recyclerView or another holder of multiple items. So, in order to create a separated layout that I could reuse for each of them I will create a separated xml, which will have the following:
+ConstraintLayout as the parent/holder layout
+ImageView to hold the image, the picture of the contact i presume, which will be fore example given a crop attribute to be scale on a specific size and constrained center vertically and at the beginning (start) of the parent.
+TextView to hold the user’s name. It will be constrained at start to the end of the ImageView, and at top to the top of the parent
+TextView to hold the phone number. It will be constrained at start to end of the ImageView, and at bottom to the bottom of the parent
+(also we can center horizontally the textview for a better UI appearance )
+
+9. What's the difference between Service and IntentService?
+	Services are supposed to be used to perform an action in the background (not related or tied up with the UI), although it happens on the main thread. The IntentService, on the other side, provides the ability to run a task asynchronously, by using the work manager and moving it into the background. Also, services need to be stopped manually or they will still be running, but the IntentService will stop automatically when the job is done.
+	
+10. What's an ANR message?
+	ANR stands for Application Not Running and it’s an error message triggered directly by the OS, when the application is taking too long to respond. In order to avoid the ANR messages you need as a programmer to avoid long time running actions on the main thread, by using threading and, in case of Koltin, Coroutines.
+
+11. Explain the BroadcastReceiver job and implementation?
+	The BroadcastReceiver is a component that responds to an intent, do something (mostly OS/device actions such as changing the volume or turning on bluetooth) and then be done. In order to properly implement and use a custom BroadcastReceiver it must be registered in the Manifest file. The custom create class must extend the BrodcastReceiver and override the callback onReceive() where you can handle it, according to the required specifications.
+
+12. Briefly describe AsyncTask.
+	AsyncTask is an Android Component created in order to handle heavy computations/operations  (networking requests, db operations, complex calculus). The idea of using AsyncTask is to take away the previously mentioned operation and move them to a background thread without affecting the UI and other user actions. The AsyncTask has three main callbacks that we can implement actions on: onPreExecute(), doInBackground(), onPostExecute().We should prepare the resources/actions needed on the first mentioned callback, and release/display them on the last mention callback -> this two happen on the main thread. And the heavy part of the operations should happen on the doInBackground() callback -> this will happen on the background thread.
+
+13. What's the difference between Parcelable and Serializable?
+	Even though both of them are interfaces created in the SDKs in order to convert objects/data to stream bytes, the difference between them relies on the speed. Serializable is more in use in java development, but Parceble was created for a better speed, and it was designed more for Android Development.
+
+14. How to access a variable in Activity from Fragment?
+	This type of communication can be done using an Interface/Listener, created between the two components. The Activity needs to have the implementation, and the Fragment needs pass the data.
+
+15. How to make a variable thread safe?
+This depends a lot on what you are implementing. If you just need a constant, a variable to be used inside a thread, you make it final. If you are working with multiple threads (or coroutines in case of Kotlin) and you want a variable to be used in different situations/cases you may use one of the following two keywords: volatile (@Volatile in Kotlin) and synchronised.
+
+16. Briefly describe one design pattern and one case where it is not suitable.
+	The design pattern I have used more in my career until now is the Factory Design Pattern. A brief description would be that you should implement according to this pattern when you have multiple objects/classes that share the same superclass. At my previous job we had a SFA Solution (Sales Force Automation). Each of our clients had multiple types of documents that they needed to deliver accordingly (most of them were types of invoices - simple invoice, fiscal invoice, invoices with special offers, invoices on different categories of products, tax free invoices, etc). Technically speaking all of these invoices were extending an Invoice general object class. We were receiving from the backend via a Web Service the types of invoices one client is using, and built enough tabs in the app according to the information we received. For that we were using the Factory Design Pattern.
+	Although, the application was firstly designed like that (about 8 years ago) it came up to not be suitable, because other documents appeared over time that had nothing to do with the Invoice, but in order to keep the pattern and avoid a heavy refactoring, we still implemented over that(long story). So, having that experience, I consider you should adapt the business logic to the architecture of the app, and most of all, you should not use Factory Design Pattern where there are also behavioral changes on the specific objects, even if all of them have the save parent class/super class.
+
+
+17. What's Singleton, when do you use it in Android?
+	A Singleton is a design pattern used in order to make a class have only one instance in the whole application which you could access globally from anywhere. Singleton Design Pattern should be used for logging and custom drivers objects.
+	In Kotlin, the pattern was simplified, by putting the pattern behind the keyword “object”.
+
+18. What's the difference between the LinkedList, ArrayList and Arrays? 
+Array is a simple fixed size list
+ArrayList is a dynamic list, better than Array for storing and accessing data -> it implements List class
+LinkedList is quite similar to ArrayList, but it also works as a queue, making it more fast and efficient. 
+
+19. What do you know about push notifications ?
+	Push notifications are “messages” sent from an external source to the device, which handles it using an data intent that is triggering directly the OS, which will display that custom message in the notifications “area” of the device. The most used tool to develop push notification is FCM (Firebase Cloud Messaging). 
+
+20. What's the difference between MVC and MVP?
+	The main difference between Model View Controller and Model View Presenter is the way that the components communicate between them. 
+	In the case of MVC between the View and the Controller there is a bidirectional communication, meaning that each user interaction with the UI triggers a action, which has a specific logic that happens in the Controller part. Even this is pretty similar to the MVP, the difference is that both View and Controller rely on the Model. The Controller handles just la logic, but the data modifications/actions are happening in both components.
+In the case of MVP, the View constraint ONLY the UI, and communicates ONLY with the Presenter, which holds the logic and also is responsible to communicate the changes/actions to the Model. 
+
+21. What's the purpose of a Content Provider?
+	The purpose of a Content Provider is to share data between two Android Applications.
+	
+
+22. What libraries do you use for Networking, Image loading, Database?
+	Until now, for Networking/API consuming I have been using Retrofit, but also played a bit with Ktor for Kotlin. For image loading I mostly used Picasso, but I had a project when I tried Glide. Talking about databases, here I worked with SQLite, Realm and Room. The most preferred one by me is Room, mostly for being fast and easy to implement,but  also the main reason is the possibility to build your custom queries where you can Join multiple tables. For me is like a combination, taking the good parts of SQLite and Realm. 
+
+23. Which Android Jetpack components do you use?
+	I will enumerate here the components I have been using: 
+LiveData
+DataBinding
+Room
+LifeCycler
+Kotlin Extensions (KTX)
+MVVM
+Animations and transitions
+
+
+24. If you suspected an Android Jetpack component has a bug, where would you look to confirm if it is a known issue or if others are reporting an issue?
+	Mainly you check on the developers.android.com to see if there are some bugs reported officially. If not stackoverflow.com and medium.com community are quite responsive in discovering bugs in Android Jetpack components. Git projects forums are also worth checking.
+
+
+## Rx Java questions:
+1. When you use observeOn() and subscribeOn()?
+observeOn() is used in order to decide on which thread the Emitter we established is executed. It need the Scheduler parameter to know on which thread to run
+subscribeOn() it is used to switch the emission of the data using the selected Scheduler(most cases MainUI thread)
+
+2. What’s the difference between map and flatMap in Rxjava?
+In RxJava map is used to directly apply a function on the items emitted by an Observable;
+flatMap is used to transform the items emitted by an Observable into other Observables
+
+3. What do you use to handle a very fast Sensor that emits many readings at a time in Rx way?
+	The idea that the Sensor emits many readings at a time makes me think of Backpressure, which needs to be handled. In order to do that, instead of a simple Observable a developer should use Flowable with drop backpressure parameter
+
+4. How can you access the value of an observable?
+	The value/values of an observable can be accessed by subscribing to them.
+
+5. Using RxJava, you are notified of item values, how can you notify your own items?
+	In order to notify your own item, I consider that you should build your own custom operator.
+
+6. How can you manage a null item value?
+	In my opinion that depends on the logic of the application. Is null a possible response or an error case? If it’s an error case you should set a proper emitter type that will handle that error case. If the data's value is null, not being an error case but a result, you can implement an Optional data class (mainly in Kotlin).
+
